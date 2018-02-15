@@ -36,6 +36,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Processes search results produced by a SearchDistributor.
+ * Adding a comment to commit
  */
 public class DataConsumer {
 
@@ -209,17 +210,14 @@ public class DataConsumer {
      * @return a {@link java.util.concurrent.Future} for handing the request
      */
     public Future<String> sendRequest(final String path, final ReportingHandler reportingHandler) {
-        return threadPool.submit(new Callable<String>() {
-            @Override
-            public String call() {
-                String response = getResponse(path);
+        return threadPool.submit(() -> {
+            String response = getResponse(path);
 
-                if (reportingHandler != null) {
-                    reportingHandler.handleResponse(response);
-                }
-
-                return response;
+            if (reportingHandler != null) {
+                reportingHandler.handleResponse(response);
             }
+
+            return response;
         });
     }
 
